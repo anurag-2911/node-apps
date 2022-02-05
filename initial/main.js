@@ -1,5 +1,5 @@
 var http = require('http');
-var dateTime = require('./testModule');
+var dateTime = require('./modules/timeModule');
 
 // streams
 
@@ -9,7 +9,7 @@ function readStream() {
   var fs = require('fs');
 
   var data = '';
-  var readStream = fs.createReadStream('data.txt');
+  var readStream = fs.createReadStream('./test/testdata/data.txt');
   readStream.setEncoding('utf8');
 
   readStream.on('data',function(chunk){
@@ -33,7 +33,7 @@ var fs = require("fs");
 var data = 'some sample';
 
 // Create a writable stream
-var writerStream = fs.createWriteStream('output.txt');
+var writerStream = fs.createWriteStream('./test/testdata/output.txt');
 
 // Write the data to stream with encoding to be utf8
 writerStream.write(data,'UTF8');
@@ -59,10 +59,10 @@ function pipeStream(){
 var fs = require("fs");
 
 // Create a readable stream
-var readerStream = fs.createReadStream('data.txt');
+var readerStream = fs.createReadStream('./test/testdata/data.txt');
 
 // Create a writable stream
-var writerStream = fs.createWriteStream('output.txt');
+var writerStream = fs.createWriteStream('./test/testdata/output.txt');
 
 // Pipe the read and write operations
 // read input.txt and write data to output.txt
@@ -76,9 +76,9 @@ var fs = require("fs");
 var zlib = require('zlib');
 
 // Compress the file input.txt to input.txt.gz
-fs.createReadStream('data.txt')
+fs.createReadStream('./test/testdata/data.txt')
    .pipe(zlib.createGzip())
-   .pipe(fs.createWriteStream('data.txt.gz'));
+   .pipe(fs.createWriteStream('./test/testdata/data.txt.gz'));
   
 console.log("File Compressed.");
 
@@ -88,7 +88,7 @@ function fileRead() {
   var fs = require("fs");
 
 // Asynchronous read
-fs.readFile('data.txt', function (err, data) {
+fs.readFile('./test/testdata/data.txt', function (err, data) {
    if (err) {
       return console.error(err);
    }
@@ -96,7 +96,7 @@ fs.readFile('data.txt', function (err, data) {
 });
 
 // Synchronous read
-var data = fs.readFileSync('data.txt');
+var data = fs.readFileSync('./test/testdata/data.txt');
 console.log("Synchronous read: " + data.toString());
 
 console.log("fileRead complete");
@@ -108,7 +108,7 @@ var fs = require("fs");
 
 console.log("Going to get file info!");
 
-fs.stat('data.txt', (err,stats)=>readFileInfo(err, stats));
+fs.stat('./test/testdata/data.txt', (err,stats)=>readFileInfo(err, stats));
 
 }
 
@@ -122,6 +122,8 @@ function readFileInfo(err,stats){
   // Check file type
   console.log("isFile ? " + stats.isFile());
   console.log("isDirectory ? " + stats.isDirectory());
+  console.log(__filename);
+  console.log(__dirname);
 }
 
 
@@ -132,6 +134,13 @@ chainStream();
 fileRead();
 fileStat();
 
+function callAgain()
+{
+  setInterval(()=>{
+    console.log('current time ' + dateTime.MyDateTime());
+  },3000);
+}
+callAgain();
 
 // http server
 http.createServer(function (req, res) {
