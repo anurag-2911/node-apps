@@ -30,7 +30,7 @@ function readStream() {
 function writeStream() {
 
 var fs = require("fs");
-var data = 'some sample text';
+var data = 'some sample';
 
 // Create a writable stream
 var writerStream = fs.createWriteStream('output.txt');
@@ -54,8 +54,83 @@ console.log("end of function writeStream");
 
 }
 
+function pipeStream(){
+  
+var fs = require("fs");
+
+// Create a readable stream
+var readerStream = fs.createReadStream('data.txt');
+
+// Create a writable stream
+var writerStream = fs.createWriteStream('output.txt');
+
+// Pipe the read and write operations
+// read input.txt and write data to output.txt
+readerStream.pipe(writerStream);
+
+console.log("pipe stream complete");
+}
+
+function chainStream() {
+var fs = require("fs");
+var zlib = require('zlib');
+
+// Compress the file input.txt to input.txt.gz
+fs.createReadStream('data.txt')
+   .pipe(zlib.createGzip())
+   .pipe(fs.createWriteStream('data.txt.gz'));
+  
+console.log("File Compressed.");
+
+}
+
+function fileRead() {
+  var fs = require("fs");
+
+// Asynchronous read
+fs.readFile('data.txt', function (err, data) {
+   if (err) {
+      return console.error(err);
+   }
+   console.log("Asynchronous read: " + data.toString());
+});
+
+// Synchronous read
+var data = fs.readFileSync('data.txt');
+console.log("Synchronous read: " + data.toString());
+
+console.log("fileRead complete");
+}
+
+function fileStat() {
+
+var fs = require("fs");
+
+console.log("Going to get file info!");
+
+fs.stat('data.txt', (err,stats)=>readFileInfo(err, stats));
+
+}
+
+function readFileInfo(err,stats){
+  if (err) {
+    return console.error(err);
+ }
+  console.log(stats);
+  console.log("Got file info successfully!");
+  
+  // Check file type
+  console.log("isFile ? " + stats.isFile());
+  console.log("isDirectory ? " + stats.isDirectory());
+}
+
+
 readStream();
 writeStream();
+pipeStream();
+chainStream();
+fileRead();
+fileStat();
 
 
 // http server
