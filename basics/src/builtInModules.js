@@ -17,7 +17,7 @@ const path = require('path');
 console.log(path.sep);
 
 
-const filePath = path.join('../content/', 'testdata', 'test.txt');
+const filePath = path.join('/content/', 'testdata', 'test.txt');
 console.log(filePath); // relative path
 console.log(path.basename(filePath)); // just the file name with extension
 
@@ -29,8 +29,8 @@ console.log(absolutePath);
 // fs sync functions
 const { readFileSync, writeFileSync, fstat } = require('fs');
 
-const readFilePath = path.join('../content', 'testdata', 'test.txt');
-const writeFilePath = path.join('../content', 'testdata', 'writefile01.txt');
+const readFilePath = path.join('/content', 'testdata', 'test.txt');
+const writeFilePath = path.join('/content', 'testdata', 'writefile01.txt');
 const filecontent = readFileSync(readFilePath, 'utf-8');
 writeFileSync(writeFilePath, `writing : ${filecontent}`);
 console.log(filecontent);
@@ -58,3 +58,17 @@ if(err)
 console.log('write async ' + data);
 });
 
+
+//http module
+
+const http = require('http');
+
+const server = http.createServer((req,res)=>{
+console.log(req);
+console.log(req.url);
+res.write('hello world');
+
+res.end();
+});
+
+server.listen(5555);
