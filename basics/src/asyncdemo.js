@@ -25,12 +25,12 @@ server.listen(5555, () => {
     console.log('server started');
 })
 
-const {readFile} = require('fs');
+const { readFile } = require('fs');
 const path = require('path');
 const readFilePath = path.join('../content', 'testdata', 'test.txt');
 
-const readText = (readFilePath) =>{
-    return new Promise((resolve,reject)=>{
+const readText = (readFilePath) => {
+    return new Promise((resolve, reject) => {
         readFile(readFilePath, 'utf-8', (err, data) => {
             if (err) {
                 console.log(`error in reading ${readFilePath} , ${err}`);
@@ -38,17 +38,26 @@ const readText = (readFilePath) =>{
             }
             else {
 
-                console.log(data);
+                console.log('file read');
                 return resolve(data);
             }
-        
-        
+
+
         });
 
     });
 }
 
 
-readText(readFilePath)
-.then((result)=>console.log(result))
-.catch((err)=> console.log(err));
+const read = async () => {
+    try {
+        const readcontent = await readText(readFilePath);
+        console.log('file content ' + readcontent);
+
+    } catch (error) {
+        console.log('error in reading file ' + error);
+
+    }
+}
+
+read();
